@@ -1,26 +1,47 @@
 "use client";
 import CodeEditor from "@/components/CodeEditor";
 import EditorWrapper from "@/components/EditorWrapper";
+import detectLanguageByPatterns from "@/lib/langRegex";
 import { useEffect, useRef, useState } from "react";
+import { useDebouncedCallback } from "use-debounce";
+import * as monaco from "monaco-editor";
 
 export default function Home() {
   const demoSnippet = {
-  title: "Countdown Timer",
-  subtitle: "Print numbers from 10 to 0 before liftoff!",
-  code: `// Simple countdown
-for (let i = 10; i >= 0; i--) {
-  console.log(i === 0 ? "🚀 Liftoff!" : i);
-}`,
-  lang: "javascript",
-  isSaved: false,
-};
-
+    title: "Cat Talk",
+    subtitle: "What does the cat say?",
+    code: `console.log("Meow 🐾");`,
+    lang: "javascript",
+    isSaved: false,
+  };
 
   const [snippet, setSnippet] = useState(demoSnippet);
   const [isInitialized, setInitialized] = useState(false);
 
   const titleRef = useRef<HTMLHeadingElement>(null);
   const subtitleRef = useRef<HTMLHeadingElement>(null);
+
+  // For returning the editor to the original state on auto lang detect
+  const [editorState, setEditorState] = useState<{
+    position: monaco.Position | null;
+    selection: monaco.Selection | null;
+    scrollTop: number;
+    scrollLeft: number;
+  }>({
+    position: null,
+    selection: null,
+    scrollTop: 0,
+    scrollLeft: 0,
+  });
+
+  const debouncedLanguage = useDebouncedCallback((code: string) => {
+    const result = detectLanguageByPatterns(code);
+    console.log(result);
+    setSnippet((prev) => ({
+      ...prev,
+      lang: typeof result === "string" ? result : result?.id || prev.lang,
+    }));
+  }, 500);
 
   useEffect(() => {
     const cachedSnippet = localStorage.getItem("snippet");
@@ -31,27 +52,28 @@ for (let i = 10; i >= 0; i--) {
       if (subtitleRef.current) subtitleRef.current.innerText = cached.subtitle;
     } else {
       setSnippet(demoSnippet);
-      if (titleRef.current) {
-        titleRef.current.innerText = demoSnippet.title;
-      }
-      if (subtitleRef.current) subtitleRef.current.innerText = demoSnippet.subtitle;
+      if (titleRef.current) titleRef.current.innerText = demoSnippet.title;
+      if (subtitleRef.current)
+        subtitleRef.current.innerText = demoSnippet.subtitle;
     }
     setInitialized(true);
+    const languages = monaco.languages.getLanguages();
+    console.log(languages);
   }, []);
 
   useEffect(() => {
     if (isInitialized) {
       localStorage.setItem("snippet", JSON.stringify(snippet));
-      console.log("Saved to localStorage:", snippet);
+      // console.log("Saved to localStorage:", snippet);
     }
   }, [snippet, isInitialized]);
 
   const handleInput = (e: React.FormEvent<HTMLHeadingElement>) => {
     const target = e.currentTarget;
-    const cleaned = target.innerText.replace(/\s+/g, " ").trim();
+    const cleanedString = target.innerText.replace(/\s+/g, " ").trim();
     setSnippet((prev) => ({
       ...prev,
-      [target.getAttribute("data-name") as string]: cleaned,
+      [target.getAttribute("data-name") as string]: cleanedString,
     }));
   };
 
@@ -59,13 +81,24 @@ for (let i = 10; i >= 0; i--) {
     setSnippet((prev) => ({ ...prev, lang: newLang }));
   };
 
-  const handleCodeChange = (value: string | undefined) => {
+  const handleCodeChange = (
+    value: string | undefined,
+    editor: monaco.editor.IStandaloneCodeEditor
+  ) => {
     setSnippet((prev) => ({ ...prev, code: value ?? "" }));
+    // Save editor state
+    setEditorState({
+      position: editor.getPosition(),
+      selection: editor.getSelection(),
+      scrollTop: editor.getScrollTop(),
+      scrollLeft: editor.getScrollLeft(),
+    });
+    debouncedLanguage(value ?? "");
   };
 
   return (
     <div>
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-zinc-900">
+      <div className="min-h-screen bg-zinc-950">
         <div className="relative">
           <div className="max-w-6xl mx-auto px-8 py-12">
             <header className="mb-12">
@@ -103,10 +136,10 @@ for (let i = 10; i >= 0; i--) {
                       setLang={handleLanguageChange}
                     >
                       <CodeEditor
-                        key={snippet.lang}
                         initialCode={snippet.code}
                         language={snippet.lang}
                         onChange={handleCodeChange}
+                        initialEditorState={editorState}
                       />
                     </EditorWrapper>
                   </div>
@@ -119,7 +152,7 @@ for (let i = 10; i >= 0; i--) {
                     <span>Ready to execute</span>
                   </div>
                   <div className="text-xs opacity-60">
-                    {snippet.lang.toUpperCase()}
+                    {snippet.lang?.toUpperCase()}
                   </div>
                 </div>
               </main>
@@ -127,49 +160,6 @@ for (let i = 10; i >= 0; i--) {
           </div>
         </div>
       </div>
-      {/* <div>
-        <div className="min-h-screen ">
-          <div className="max-w-7xl mx-auto px-6 py-8">
-            <div className=" rounded-xl p-6">
-              <div className="space-y-6">
-                <div className="p-4">
-                  <h1
-                    data-name="title"
-                    className="text-6xl outline-0 font-bold text-indigo-50"
-                    contentEditable
-                    ref={titleRef}
-                    onInput={handleInput}
-                    suppressContentEditableWarning
-                    spellCheck="false"
-                  />
-                  <h3
-                    data-name="subtitle"
-                    className="text-2xl pt-4 outline-0 font-bold text-indigo-50"
-                    contentEditable
-                    ref={subtitleRef}
-                    onInput={handleInput}
-                    suppressContentEditableWarning
-                    spellCheck="false"
-                  />
-                </div>
-                {isInitialized && (
-                  <EditorWrapper
-                    lang={snippet.lang}
-                    setLang={handleLanguageChange}
-                  >
-                    <CodeEditor
-                      key={snippet.lang}
-                      initialCode={snippet.code}
-                      language={snippet.lang}
-                      onChange={handleCodeChange}
-                    />
-                  </EditorWrapper>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> */}
     </div>
   );
 }
