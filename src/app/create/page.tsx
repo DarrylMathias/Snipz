@@ -5,6 +5,8 @@ import detectLanguageByPatterns from "@/lib/langRegex";
 import { useEffect, useRef, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import * as monaco from "monaco-editor";
+import { InputTags } from "@/components/ui/tag-input";
+import { NavbarCreateSnippet } from "@/components/NavbarCreate";
 
 export default function Home() {
   const demoSnippet = {
@@ -12,11 +14,14 @@ export default function Home() {
     subtitle: "What does the cat say?",
     code: `console.log("Meow 🐾");`,
     lang: "javascript",
+    tags: ["nextjs", "react"],
+    isPublic : false,
     isSaved: false,
   };
 
   const [snippet, setSnippet] = useState(demoSnippet);
   const [isInitialized, setInitialized] = useState(false);
+  const [values, setValues] = useState<string[]>(demoSnippet.tags);
 
   const titleRef = useRef<HTMLHeadingElement>(null);
   const subtitleRef = useRef<HTMLHeadingElement>(null);
@@ -48,10 +53,12 @@ export default function Home() {
     if (cachedSnippet) {
       const cached = JSON.parse(cachedSnippet);
       setSnippet(cached);
+      setValues(cached.tags)
       if (titleRef.current) titleRef.current.innerText = cached.title;
       if (subtitleRef.current) subtitleRef.current.innerText = cached.subtitle;
     } else {
       setSnippet(demoSnippet);
+      setValues(demoSnippet.tags)
       if (titleRef.current) titleRef.current.innerText = demoSnippet.title;
       if (subtitleRef.current)
         subtitleRef.current.innerText = demoSnippet.subtitle;
@@ -64,7 +71,7 @@ export default function Home() {
   useEffect(() => {
     if (isInitialized) {
       localStorage.setItem("snippet", JSON.stringify(snippet));
-      // console.log("Saved to localStorage:", snippet);
+      console.log("Saved to localStorage:", snippet);
     }
   }, [snippet, isInitialized]);
 
@@ -96,8 +103,18 @@ export default function Home() {
     debouncedLanguage(value ?? "");
   };
 
+  const handleTagChange = (value : string[]) => {
+      setValues(value);
+      setSnippet((prev) => ({...prev, tags : value}))
+  }
+
+  const handleAccessChange = (value : boolean) => {
+    setSnippet((prev) => ({...prev, isPublic : value}))
+  }
+
   return (
     <div>
+      <NavbarCreateSnippet isPublic={snippet.isPublic} onToggle={handleAccessChange} />
       <div className="min-h-screen bg-zinc-950">
         <div className="relative">
           <div className="max-w-6xl mx-auto px-8 py-12">
@@ -124,6 +141,16 @@ export default function Home() {
                   suppressContentEditableWarning
                   spellCheck="false"
                 />
+              </div>
+              <div>
+                {isInitialized && (
+                  <InputTags
+                    value={values}
+                    onChange={handleTagChange}
+                    placeholder="Enter values, comma separated..."
+                    className="mt-5"
+                  />
+                )}
               </div>
             </header>
 

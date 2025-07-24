@@ -1,9 +1,8 @@
 "use client";
 
 import { Editor } from "@monaco-editor/react";
-import { Loader2Icon } from "lucide-react";
 import * as monaco from "monaco-editor";
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { LoaderFive } from "@/components/ui/loader";
 
 type CodeEditorProps = {
@@ -66,6 +65,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
       }
       options={{
         minimap: { enabled: false }, // Disable the minimap
+        wordWrap: "on"
       }}
     />
   );
