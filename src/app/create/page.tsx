@@ -7,8 +7,17 @@ import { useDebouncedCallback } from "use-debounce";
 import * as monaco from "monaco-editor";
 import { InputTags } from "@/components/ui/tag-input";
 import { NavbarCreateSnippet } from "@/components/NavbarCreate";
+import SidebarSnippets from "@/components/SidebarSnippets";
 
-export default function Home() {
+export default function Component(){
+  return(
+    <SidebarSnippets>
+      <Home />
+    </SidebarSnippets>
+  )
+}
+
+export function Home() {
   const demoSnippet = {
     title: "Cat Talk",
     subtitle: "What does the cat say?",
@@ -122,7 +131,7 @@ export default function Home() {
               <div className="space-y-3">
                 <h1
                   data-name="title"
-                  className="text-5xl md:text-7xl font-semibold text-white/95 outline-none leading-tight tracking-tight hover:text-white transition-colors duration-300 cursor-text"
+                  className="text-4xl sm:text-5xl md:text-7xl font-semibold text-white/95 outline-none leading-tight tracking-tight hover:text-white transition-colors duration-300 cursor-text"
                   contentEditable
                   ref={titleRef}
                   onInput={handleInput}
@@ -190,3 +199,4 @@ export default function Home() {
     </div>
   );
 }
+

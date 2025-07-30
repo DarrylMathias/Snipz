@@ -50,7 +50,8 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
 
   return (
     <Editor
-      height="90vh"
+      // height="90vh"
+      className="h-[90vh]"
       theme="vs-dark"
       defaultValue={initialCode}
       language={language}
