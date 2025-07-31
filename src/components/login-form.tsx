@@ -11,7 +11,7 @@ import {
   googleAuth,
 } from "@/config/firebase.config";
 import {
-  createUserWithEmailAndPassword,
+  getIdToken,
   sendSignInLinkToEmail,
   signInWithPopup,
   signInWithRedirect,
@@ -34,7 +34,13 @@ export function LoginForm({
     try {
       e.preventDefault();
       await signInWithPopup(auth, googleAuth);
-      document.cookie = "isAuthenticated=true; path=/";
+      const idToken = await getIdToken(auth.currentUser!, true);
+      console.log('Saved token',idToken);
+      await fetch("/api/session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ idToken }),
+      });
       router.push("/dashboard");
     } catch (err: unknown) {
       if (err instanceof FirebaseError) {
@@ -51,7 +57,12 @@ export function LoginForm({
     try {
       e.preventDefault();
       await signInWithPopup(auth, githubAuth);
-      document.cookie = "isAuthenticated=true; path=/";
+      const idToken = await getIdToken(auth.currentUser!, true);
+      await fetch("/api/session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ idToken }),
+      });
       router.push("/dashboard");
     } catch (err: unknown) {
       if (err instanceof FirebaseError) {
@@ -86,11 +97,9 @@ export function LoginForm({
 
       window.localStorage.setItem("emailForSignIn", data.email);
       console.log(auth.currentUser);
-      // router.push("/dashboard");
       toast.success(
         `A sign-in email with additional instructions was sent to ${data.email}. Check your email to complete sign-in.`
       );
-      document.cookie = "isAuthenticated=true; path=/";
     } catch (err: unknown) {
       if (err instanceof FirebaseError) {
         console.log(err.cause);
@@ -164,17 +173,6 @@ export function LoginForm({
           </svg>
           Login with GitHub
         </Button>
-      </div>
-      <div className="text-center text-sm">
-        Don&apos;t have an account?{" "}
-        <button
-          className="underline underline-offset-4"
-          onClick={() => {
-            signOut(auth);
-          }}
-        >
-          Sign up
-        </button>
       </div>
     </form>
   );

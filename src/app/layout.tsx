@@ -2,10 +2,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
-import "./globals.css";import localFont from 'next/font/local'
+import "./globals.css";
+import localFont from 'next/font/local'
 import { MainNavbar } from "@/components/MainNavbar";
 import { usePathname } from "next/navigation";
 import toast, { Toaster } from 'react-hot-toast';
+import { ThemeScript } from "./ThemeScript";
  
 const myFont = localFont({
   src: "../../public/fonts/Gilroy-Semibold.ttf",
@@ -36,16 +38,20 @@ export default function RootLayout({
   const pathname = usePathname()
   const notAllowed = ['/create', '/dashboard', '/showcase', '/templates', '/login']
   return (
-    <html lang="en">
+    <html lang="en" className="dark" suppressHydrationWarning>
+      <head>
+        <ThemeScript />
+      </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${myFont.variable} antialiased overflow-x-hidden`}
+        className={`${geistSans.variable} ${geistMono.variable} ${myFont.variable} antialiased overflow-x-hidden suppressHydrationWarning`}
       >
         {!notAllowed.includes(pathname) && <MainNavbar />}
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="dark"
+          enableSystem={false}
           disableTransitionOnChange
+          forcedTheme="dark" // Force dark theme
         >
           <Toaster />
           {children}
