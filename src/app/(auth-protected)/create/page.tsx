@@ -2,7 +2,7 @@
 import CodeEditor from "@/components/CodeEditor";
 import EditorWrapper from "@/components/EditorWrapper";
 import detectLanguageByPatterns from "@/lib/langRegex";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import * as monaco from "monaco-editor";
 import { InputTags } from "@/components/ui/tag-input";
@@ -17,16 +17,17 @@ export default function Component(){
   )
 }
 
-export function Home() {
-  const demoSnippet = {
-    title: "Cat Talk",
-    subtitle: "What does the cat say?",
-    code: `console.log("Meow 🐾");`,
-    lang: "javascript",
-    tags: ["nextjs", "react"],
-    isPublic : false,
-    isSaved: false,
-  };
+function Home() {
+  const demoSnippet = useMemo(() => ({
+  title: "Cat Talk",
+  subtitle: "What does the cat say?",
+  code: `console.log("Meow 🐾");`,
+  lang: "javascript",
+  tags: ["nextjs", "react"],
+  isPublic: false,
+  isSaved: false,
+}), []);
+
 
   const [snippet, setSnippet] = useState(demoSnippet);
   const [isInitialized, setInitialized] = useState(false);
@@ -75,7 +76,7 @@ export function Home() {
     setInitialized(true);
     const languages = monaco.languages.getLanguages();
     console.log(languages);
-  }, []);
+  }, [demoSnippet]);
 
   useEffect(() => {
     if (isInitialized) {

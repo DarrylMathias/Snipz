@@ -1,6 +1,6 @@
+"use client"
 import React from 'react';
-import { 
-  FileCode, 
+import {
   Zap, 
   Copy, 
   Search,
@@ -17,7 +17,7 @@ export default function Component(){
   )
 }
 
-export function Templates() {
+function Templates() {
   return (
     <div className="min-h-screen bg-zinc-950 text-white">
       {/* Hero Section */}
@@ -48,7 +48,7 @@ export function Templates() {
         <div className="bg-zinc-900/50 rounded-xl border border-zinc-800 p-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-white mb-4">
-              What's Coming
+              What&apos;s Coming
             </h2>
             <p className="text-zinc-400 text-lg">
               Professional code templates at your fingertips
@@ -127,8 +127,8 @@ export function Templates() {
               </div>
               <div className="p-4">
                 <div className="space-y-2 text-sm font-mono">
-                  <div className="text-violet-400">import React from 'react';</div>
-                  <div className="text-zinc-500">// Template: Functional Component</div>
+                  <div className="text-violet-400">import React from &apos;react&apos;;</div>
+                  <div className="text-zinc-500">{'// Template: Functional Component'}</div>
                   <span className="text-blue-400">export default function</span>
                   <span className="text-yellow-400"> ComponentName</span>
                   <span className="text-white">() {'{'}</span>

@@ -9,7 +9,6 @@ import {
   IconMenu2,
 } from "@tabler/icons-react";
 import { motion } from "motion/react";
-import { cn } from "@/lib/utils";
 import Link from "next/link";
 import Image from "next/image";
 import { auth } from "@/config/firebase.config";
@@ -94,7 +93,7 @@ export default function SidebarSnippets({ children }: { children: ReactNode }) {
                   href="#"
                   className="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors"
                 >
-                  <img
+                  <Image
                     src={auth.currentUser?.photoURL || "https://picsum.photos/30"}
                     className="h-7 w-7 shrink-0 rounded-full"
                     width={50}
@@ -134,7 +133,7 @@ export default function SidebarSnippets({ children }: { children: ReactNode }) {
                   label: auth.currentUser?.displayName ?? auth.currentUser?.email ?? "Anonymous",
                   href: "#",
                   icon: (
-                    <img
+                    <Image
                       src={auth.currentUser?.photoURL || "https://picsum.photos/30"}
                       className="h-7 w-7 shrink-0 rounded-full"
                       width={50}

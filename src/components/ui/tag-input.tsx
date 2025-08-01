@@ -1,5 +1,3 @@
-// input-tags.tsx
-
 "use client";
 
 import * as React from "react";
@@ -10,7 +8,7 @@ import { cn } from "@/lib/utils";
 
 type InputTagsProps = Omit<React.ComponentProps<"input">, "value" | "onChange"> & {
   value: string[];
-  onChange: React.Dispatch<React.SetStateAction<string[]>>;
+  onChange: (value: string[]) => void;
 };
 
 const InputTags = React.forwardRef<HTMLInputElement, InputTagsProps>(

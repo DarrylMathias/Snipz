@@ -1,3 +1,4 @@
+"use client"
 import SidebarSnippets from '@/components/SidebarSnippets'
 import React from 'react'
 
@@ -9,7 +10,7 @@ export default function Component(){
   )
 }
 
-export function Showcase(){
+function Showcase(){
   return (
     <div>Showcase</div>
   )

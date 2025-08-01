@@ -88,9 +88,7 @@
 import {
   Navbar,
   NavBody,
-  NavItems,
   MobileNav,
-  NavbarLogo,
   NavbarButton,
   MobileNavHeader,
   MobileNavToggle,

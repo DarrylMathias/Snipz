@@ -22,7 +22,7 @@ export function FirebaseAuth() {
         "password"
       ],
       callbacks: {
-        signInSuccessWithAuthResult: (authResult, redirectUrl) => {
+        signInSuccessWithAuthResult: (authResult) => {
           console.log("Login success:", authResult.user);
           router.push("/dashboard");
           return false; // prevent automatic redirect

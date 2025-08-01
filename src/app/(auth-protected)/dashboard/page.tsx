@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import SidebarSnippets from "@/components/SidebarSnippets";
 
 export default function Component(){

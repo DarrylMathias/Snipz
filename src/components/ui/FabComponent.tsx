@@ -2,7 +2,7 @@
 
 import { Fab, Action } from "react-tiny-fab";
 import "react-tiny-fab/dist/styles.css";
-import { MdAdd, MdEmail, MdHelp, MdCode } from "react-icons/md";
+import {MdHelp, MdCode } from "react-icons/md";
 import { RiSlideshowView } from "react-icons/ri";
 import React from "react";
 import { useRouter } from "next/navigation";

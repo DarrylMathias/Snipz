@@ -12,7 +12,7 @@ export default async function logout() {
       const decoded = await adminAuth.verifySessionCookie(sessionCookie);
       await adminAuth.revokeRefreshTokens(decoded.sub);
     } catch (err) {
-      console.error("Invalid session cookie");
+      console.error("Invalid session cookie", err);
     }
   }
 

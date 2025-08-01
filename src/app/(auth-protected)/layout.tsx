@@ -1,4 +1,3 @@
-// app/(auth-protected)/layout.tsx
 import "@/app/globals.css";
 import { redirect } from "next/navigation";
 import { verifySession } from "@/lib/auth/verifySession";

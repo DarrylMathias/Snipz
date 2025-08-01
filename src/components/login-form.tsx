@@ -1,5 +1,5 @@
 "use client";
-
+export const dynamic = "force-dynamic";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,8 +14,6 @@ import {
   getIdToken,
   sendSignInLinkToEmail,
   signInWithPopup,
-  signInWithRedirect,
-  signOut,
 } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -30,12 +28,12 @@ export function LoginForm({
 
   const router = useRouter();
 
-  const loginGoogle = async (e: any) => {
+  const loginGoogle = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
       e.preventDefault();
       await signInWithPopup(auth, googleAuth);
       const idToken = await getIdToken(auth.currentUser!, true);
-      console.log('Saved token',idToken);
+      console.log("Saved token", idToken);
       await fetch("/api/session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -53,7 +51,7 @@ export function LoginForm({
     }
   };
 
-  const loginGithub = async (e: any) => {
+  const loginGithub = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
       e.preventDefault();
       await signInWithPopup(auth, githubAuth);
@@ -75,7 +73,7 @@ export function LoginForm({
     }
   };
 
-  const fillData = (e: any) => {
+  const fillData = (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
       setData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     } catch (err: unknown) {
@@ -89,13 +87,15 @@ export function LoginForm({
     }
   };
 
-  const loginEmail = async (e: any) => {
+  const loginEmail = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
       e.preventDefault();
       await sendSignInLinkToEmail(auth, data.email, actionCodeSettings);
       console.log("Link sent");
 
-      window.localStorage.setItem("emailForSignIn", data.email);
+      if (typeof window !== "undefined") {
+        window.localStorage.setItem("emailForSignIn", data.email);
+      }
       console.log(auth.currentUser);
       toast.success(
         `A sign-in email with additional instructions was sent to ${data.email}. Check your email to complete sign-in.`

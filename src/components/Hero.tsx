@@ -3,6 +3,7 @@
 import { motion } from "motion/react";
 import { Spotlight } from "./ui/spotlight-new";
 import Link from "next/link";
+import Image from "next/image";
 
 export function Hero() {
   return (
@@ -96,7 +97,7 @@ export function Hero() {
           className="relative z-10 mt-55 rounded-3xl border border-neutral-200 bg-neutral-100 p-4 shadow-md dark:border-neutral-800 dark:bg-neutral-900"
         >
           <div className="w-full overflow-x-hidden rounded-xl border border-gray-300 dark:border-gray-700">
-            <img
+            <Image
               src="https://assets.aceternity.com/pro/aceternity-landing.webp"
               alt="Landing page preview"
               className="aspect-[16/9] h-auto w-full object-cover"
