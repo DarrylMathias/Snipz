@@ -6,7 +6,6 @@ import localFont from 'next/font/local'
 import { MainNavbar } from "@/components/MainNavbar";
 import { usePathname } from "next/navigation";
 import { Toaster } from 'react-hot-toast';
-import { ThemeScript } from "./ThemeScript";
  
 const myFont = localFont({
   src: "../../public/fonts/Gilroy-Semibold.ttf",
@@ -30,16 +29,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname()
-  const notAllowed = ['/create', '/dashboard', '/showcase', '/templates', '/login']
+  const notAllowed = ['/dashboard', '/showcase', '/templates', '/login']
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
-      <head>
-        <ThemeScript />
-      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${myFont.variable} antialiased overflow-x-hidden suppressHydrationWarning`}
       >
-        {!notAllowed.includes(pathname) && <MainNavbar />}
+        {(!notAllowed.includes(pathname) && !pathname.startsWith('/snippet')) && <MainNavbar />}
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

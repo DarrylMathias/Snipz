@@ -33,7 +33,7 @@ const EmailVerfication = () => {
             // User opened the link on a different device. To prevent session fixation
             // attacks, ask the user to provide the associated email again. For example:
             toast.error("Please provide your email for confirmation");
-            router.push("/login");
+            router.replace("/login");
           }
           // The client SDK will parse the code from the link for you.
           try {
@@ -46,7 +46,7 @@ const EmailVerfication = () => {
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ idToken }),
             });
-            router.push("/dashboard");
+            router.replace("/dashboard");
           } catch (err: unknown) {
             if (err instanceof FirebaseError) {
               console.log(err);

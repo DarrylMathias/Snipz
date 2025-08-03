@@ -39,7 +39,7 @@ export function LoginForm({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ idToken }),
       });
-      router.push("/dashboard");
+      router.replace("/dashboard");
     } catch (err: unknown) {
       if (err instanceof FirebaseError) {
         console.log(err);
@@ -61,7 +61,7 @@ export function LoginForm({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ idToken }),
       });
-      router.push("/dashboard");
+      router.replace("/dashboard");
     } catch (err: unknown) {
       if (err instanceof FirebaseError) {
         console.log(err);

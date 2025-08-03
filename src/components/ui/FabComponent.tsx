@@ -1,12 +1,11 @@
-"use client"
+"use client";
 
 import { Fab, Action } from "react-tiny-fab";
 import "react-tiny-fab/dist/styles.css";
-import {MdHelp, MdCode } from "react-icons/md";
+import { MdHelp, MdCode } from "react-icons/md";
 import { RiSlideshowView } from "react-icons/ri";
 import React from "react";
 import { useRouter } from "next/navigation";
-
 
 const mainButtonStyles = {
   backgroundColor: "#a855f7",
@@ -35,7 +34,6 @@ const actionButtonStyles = {
 };
 
 const FabComponent = () => {
-
   const router = useRouter();
 
   const handleShowcaseClick = () => {
@@ -43,11 +41,11 @@ const FabComponent = () => {
   };
 
   const handleContactUsClick = () => {
-    router.push('/contact');
+    router.replace("/contact");
   };
 
   const handleTemplateClick = () => {
-    router.push('/templates');
+    router.replace("/templates");
   };
 
   return (
@@ -63,13 +61,25 @@ const FabComponent = () => {
       event="hover"
       alwaysShowTitle
     >
-      <Action text="Templates" onClick={handleTemplateClick} style={actionButtonStyles}>
+      <Action
+        text="Templates"
+        onClick={handleTemplateClick}
+        style={actionButtonStyles}
+      >
         <MdCode />
       </Action>
-      <Action text="Showcase" onClick={handleShowcaseClick} style={actionButtonStyles}>
+      <Action
+        text="Showcase"
+        onClick={handleShowcaseClick}
+        style={actionButtonStyles}
+      >
         <RiSlideshowView />
       </Action>
-      <Action text="Contact" onClick={handleContactUsClick} style={actionButtonStyles}>
+      <Action
+        text="Contact"
+        onClick={handleContactUsClick}
+        style={actionButtonStyles}
+      >
         <MdHelp />
       </Action>
     </Fab>

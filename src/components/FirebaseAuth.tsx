@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect } from "react";
@@ -16,15 +15,11 @@ export function FirebaseAuth() {
       firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(auth);
 
     ui.start("#firebaseui-auth-container", {
-      signInOptions: [
-        googleAuth.providerId,
-        githubAuth.providerId,
-        "password"
-      ],
+      signInOptions: [googleAuth.providerId, githubAuth.providerId, "password"],
       callbacks: {
         signInSuccessWithAuthResult: (authResult) => {
           console.log("Login success:", authResult.user);
-          router.push("/dashboard");
+          router.replace("/dashboard");
           return false; // prevent automatic redirect
         },
         signInFailure: function (error) {

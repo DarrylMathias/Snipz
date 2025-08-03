@@ -25,7 +25,7 @@ export function MainNavbar() {
     },
     {
       name: "Create",
-      link: "/create",
+      link: "/snippet/new",
     },
   ];
 
